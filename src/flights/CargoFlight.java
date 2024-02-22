@@ -2,6 +2,8 @@ package flights;
 
 import java.time.LocalDateTime;
 import airports.Airport;
+import misc.Aircraft;
+import misc.Airline;
 
 public class CargoFlight extends PublicFlight{
     
@@ -12,15 +14,20 @@ public class CargoFlight extends PublicFlight{
         LocalDateTime actualArrival,
         String flightNumber,
         Airport source,
-        Airport destination) 
+        Airport destination,
+        Airline handlerAirline,
+        Aircraft aircraft) 
         {
             super(
-            scheduledDepart,
-            scheduledArrival,
-            actualDepart,
-            actualArrival,
-            flightNumber,
-            source,
-            destination);
+                scheduledDepart,
+                scheduledArrival,
+                actualDepart,
+                actualArrival,
+                flightNumber,
+                source,
+                destination, 
+                handlerAirline, 
+                aircraft
+            );
         }
 }
