@@ -7,7 +7,12 @@ public abstract class Actor {
     private Boolean read;
     private Boolean write;
 
-    
+    public Actor() {
+        this.auth = Auth.UNREGISTERED;
+        this.registered = false;
+        this.read = true;
+        this.write = false;
+    }
 
     public Actor(Auth auth, Boolean registered, Boolean read, Boolean write) {
         this.auth = auth;

@@ -1,9 +1,9 @@
 package actors;
 
 public enum Auth {
-    UNREGISTERED,
     REGISTERED,
+    UNREGISTERED,
+    ADMIN,
     AIRPORT_ADMIN,
-    AIRLINE_ADMIN,
-    ADMIN
+    AIRLINE_ADMIN
 }
