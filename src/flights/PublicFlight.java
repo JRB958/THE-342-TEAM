@@ -2,11 +2,12 @@ package flights;
 
 import java.time.LocalDateTime;
 import airports.Airport;
+import misc.Aircraft;
 import misc.Airline;
 
 public class PublicFlight extends Flight{
     
-    private Airline flightAirline;
+    private Airline handlerAirline;
 
     public PublicFlight(
         LocalDateTime scheduledDepart,
@@ -15,7 +16,9 @@ public class PublicFlight extends Flight{
         LocalDateTime actualArrival,
         String flightNumber,
         Airport source,
-        Airport destination) 
+        Airport destination,
+        Airline airline,
+        Aircraft aircraft) 
         {
             super(
             scheduledDepart,
@@ -24,6 +27,8 @@ public class PublicFlight extends Flight{
             actualArrival,
             flightNumber,
             source,
-            destination);
+            destination,
+            aircraft);
+            this.handlerAirline = airline;
         }
 }

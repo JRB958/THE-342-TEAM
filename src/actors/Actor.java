@@ -52,5 +52,4 @@ public abstract class Actor {
     public void setWrite(Boolean write) {
         this.write = write;
     }
-
 }
