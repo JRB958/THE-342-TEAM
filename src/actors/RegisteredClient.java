@@ -1,15 +1,17 @@
 package actors;
-import airports.*;
 
-public class AirportAdmin extends Actor{
-    private Airport airport;
+public class RegisteredClient extends Actor{
     private String email;
     private String password;
 
-    public AirportAdmin(Airport airport, String email, String password) {
+    RegisteredClient() {
+        super(Auth.REGISTERED, true, true, false);
+        this.email = "";
+        this.password = "";
+    }
 
-        super(Auth.AIRPORT_ADMIN, true, true, true);
-        this.airport = airport;
+    RegisteredClient(Auth auth, Boolean registered, Boolean read, Boolean write, String email, String password) {
+        super(auth, registered, read, write);
         this.email = email;
         this.password = password;
     }
@@ -28,13 +30,5 @@ public class AirportAdmin extends Actor{
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Airport getAirport() {
-        return airport;
-    }
-
-    public void setAirport(Airport airport) {
-        this.airport = airport;
     }
 }
