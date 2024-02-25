@@ -14,8 +14,8 @@ public class CommFlight extends PublicFlight{
         String flightNumber,
         Airport source,
         Airport destination,
-        Airline handlerAirline,
-        Aircraft aircraft) 
+        Aircraft aircraft,
+        Airline airline) 
         {
             super(
             scheduledDepart,
@@ -25,8 +25,7 @@ public class CommFlight extends PublicFlight{
             flightNumber,
             source,
             destination,
-            handlerAirline, 
-            aircraft
-            );
+            aircraft,
+            airline);
         }
 }

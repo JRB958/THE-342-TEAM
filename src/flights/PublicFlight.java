@@ -7,7 +7,6 @@ import misc.Airline;
 
 public class PublicFlight extends Flight{
     
-    private Airline handlerAirline;
 
     public PublicFlight(
         LocalDateTime scheduledDepart,
@@ -17,8 +16,8 @@ public class PublicFlight extends Flight{
         String flightNumber,
         Airport source,
         Airport destination,
-        Airline airline,
-        Aircraft aircraft) 
+        Aircraft aircraft,
+        Airline airline) 
         {
             super(
             scheduledDepart,
@@ -28,7 +27,7 @@ public class PublicFlight extends Flight{
             flightNumber,
             source,
             destination,
-            aircraft);
-            this.handlerAirline = airline;
+            aircraft,
+            airline);
         }
 }
