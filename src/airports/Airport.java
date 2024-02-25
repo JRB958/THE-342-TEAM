@@ -2,6 +2,9 @@ package airports;
 import misc.City;
 public class Airport{
     private String airportName;
+    private String airportCode;
+    private City airportCity;
+    
     public String getAirportName() {
         return airportName;
     }
@@ -20,6 +23,5 @@ public class Airport{
     public void setAirportCity(City airportCity) {
         this.airportCity = airportCity;
     }
-    private String airportCode;
-    private City airportCity;
+    
 }

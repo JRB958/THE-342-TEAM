@@ -26,18 +26,12 @@ public class Console {
 
         for (Flight flight : this.flights) {
             if (flight.getSource().equals(source) && flight.getDestination().equals(destination)) {
-                if (flight instanceof PrivateFlight) {
-                    if (actor instanceof AirportAdmin) {
-                        if (source.equals(((AirportAdmin) actor).getAirport()) || destination.equals(((AirportAdmin) actor).getAirport())) {
-                            printFlightDetails(flight, Auth.AIRPORT_ADMIN);
-                        }
+                if (flight instanceof PrivateFlight && actor instanceof AirportAdmin) {
+                    if (source.equals(((AirportAdmin) actor).getAirport()) || destination.equals(((AirportAdmin) actor).getAirport())) {
+                        printFlightDetails(flight, Auth.AIRPORT_ADMIN);
                     }
                 } else {
-                    if (actor.getAuth() == Auth.UNREGISTERED) {
-                        printFlightDetails(flight, Auth.UNREGISTERED);
-                    } else {
-                        printFlightDetails(flight, Auth.REGISTERED);
-                    }
+                    printFlightDetails(flight, actor.getAuth());
                 }
             }
         }

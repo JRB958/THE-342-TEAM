@@ -1,6 +1,4 @@
 package flights;
-import java.util.ArrayList;
-import java.util.List;
 import airports.*;
 import misc.*;
 
@@ -38,10 +36,11 @@ public class Flight {
         this.actualArrival = actualArrival;
         this.flightNumber = flightNumber;
         //ensures unique destination and source. ensure the implementation of equals in 
-        if(aSource != aDestination){
-            this.source = aSource;
-            this.destination = aDestination;   
+        if (aSource.getAirportCode().equals(aDestination.getAirportCode())) {
+            throw new IllegalArgumentException("Source and destination cannot be the same");
         }
+        this.source = aSource;
+        this.destination = aDestination;
         this.flightAircraft = flightAircraft;
         this.handlerAirline = handlerAirline;
     }
