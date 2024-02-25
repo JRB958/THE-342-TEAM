@@ -1,4 +1,4 @@
-package flights;
+ package flights;
 
 import java.time.LocalDateTime;
 import airports.Airport;

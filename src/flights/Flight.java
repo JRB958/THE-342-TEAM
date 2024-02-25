@@ -1,11 +1,13 @@
 package flights;
-
+import java.util.ArrayList;
+import java.util.List;
 import airports.*;
 import misc.*;
 
 import java.time.LocalDateTime;
 
 public class Flight {
+    private List<Flight> listOfFlights = new ArrayList<>();
 
     private LocalDateTime scheduledDepart;
     private LocalDateTime scheduledArrival;
@@ -42,4 +44,25 @@ public class Flight {
         }
         this.flightAircraft = flightAircraft;
     }
+
+    public void addFlight(Flight flight) {
+        listOfFlights.add(flight);
+    }
+
+    public List<Flight> getListOfFlights() {
+        return listOfFlights;
+    }
+
+    public List<Flight> viewFlight(Airport flightSource, Airport flightDestination) {
+        List<Flight> matchingFlights = new ArrayList<>();
+    
+        for (Flight flight : listOfFlights) {
+            if (flight.source.equals(flightSource) && flight.destination.equals(flightDestination)) {
+                matchingFlights.add(flight);
+            }
+        }
+    
+        return matchingFlights;
+    }
+    
 }
