@@ -8,14 +8,10 @@ import misc.*;
 public class Console {
     private ArrayList<Airport> airports;
     private ArrayList<Flight> flights;
-    private ArrayList<Airline> airlines;
-    private ArrayList<Aircraft> aircrafts;
 
     public Console() {
         this.airports = new ArrayList<>();
         this.flights = new ArrayList<>();
-        this.airlines = new ArrayList<>();
-        this.aircrafts = new ArrayList<>();
     }
 
     public void addAirport(Airport airport) {
