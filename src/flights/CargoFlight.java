@@ -15,19 +15,18 @@ public class CargoFlight extends PublicFlight{
         String flightNumber,
         Airport source,
         Airport destination,
-        Airline handlerAirline,
-        Aircraft aircraft) 
+        Aircraft aircraft,
+        Airline airline) 
         {
             super(
-                scheduledDepart,
-                scheduledArrival,
-                actualDepart,
-                actualArrival,
-                flightNumber,
-                source,
-                destination, 
-                handlerAirline, 
-                aircraft
-            );
+            scheduledDepart,
+            scheduledArrival,
+            actualDepart,
+            actualArrival,
+            flightNumber,
+            source,
+            destination,
+            aircraft,
+            airline);
         }
 }

@@ -4,13 +4,15 @@ import flights.*;
 
 public class Aircraft {
     private Boolean inTransit;
+    private String aircraftName;
 
     public Aircraft() {
         this.inTransit = true;
     }
 
-    public Aircraft(Boolean inTransit) {
+    public Aircraft(Boolean inTransit, String aircraftName) {
         this.inTransit = inTransit;
+        this.aircraftName = aircraftName;
     }
 
     public Boolean getInTransit() {
@@ -19,6 +21,14 @@ public class Aircraft {
 
     public void setInTransit(Boolean inTransit) {
         this.inTransit = inTransit;
+    }
+
+    public void setAircraftName(String aircraftName) {
+        this.aircraftName = aircraftName;
+    }
+
+    public String getAircraftName() {
+        return this.aircraftName;
     }
 
     @Override
