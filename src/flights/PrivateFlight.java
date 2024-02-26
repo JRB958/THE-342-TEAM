@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 public class PrivateFlight extends Flight{
     
+    private Airport handlerAirport;
 
     public PrivateFlight(
         LocalDateTime scheduledDepart,
@@ -30,6 +31,7 @@ public class PrivateFlight extends Flight{
             destination,
             aircraft,
             airline);
+            this.handlerAirport = source;
         }
 
 

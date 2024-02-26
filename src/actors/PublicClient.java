@@ -2,7 +2,7 @@ package actors;
 
 public class PublicClient extends Actor{
 
-    PublicClient() {
+    public PublicClient() {
         super();
     }
 

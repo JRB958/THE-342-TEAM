@@ -4,13 +4,19 @@ public class RegisteredClient extends Actor{
     private String email;
     private String password;
 
-    RegisteredClient() {
+    public RegisteredClient() {
         super(Auth.REGISTERED, true, true, false);
         this.email = "";
         this.password = "";
     }
 
-    RegisteredClient(Auth auth, Boolean registered, Boolean read, Boolean write, String email, String password) {
+    public RegisteredClient(String email, String password) {
+        super(Auth.REGISTERED, true, true, false);
+        this.email = email;
+        this.password = password;
+    }
+
+    public RegisteredClient(Auth auth, Boolean registered, Boolean read, Boolean write, String email, String password) {
         super(auth, registered, read, write);
         this.email = email;
         this.password = password;
