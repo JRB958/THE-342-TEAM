@@ -1,169 +1,215 @@
-import java.time.LocalDateTime;
+// Main entry point of the application
+import java.util.Scanner;
 
 import actors.*;
 import airports.*;
-import flights.*;
-import misc.*;
 import system.*;
 
-
-
 public class App {
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         // Initilizing console for testing purposes
         Console console = new Console();
-        Airport airport1 = new Airport();
-        airport1.setAirportName("Murtala Muhammed International Airport");
-        airport1.setAirportCode("LOS");
-        City city1 = new City();
-        city1.setName("Lagos");
-        city1.setCountry("Nigeria");
-        airport1.setAirportCity(city1);
-        console.addAirport(airport1);
+        console.init();
 
-        Airport airport2 = new Airport();
-        airport2.setAirportName("Heathrow Airport");
-        airport2.setAirportCode("LHR");
-        City city2 = new City();
-        city2.setName("London");
-        city2.setCountry("United Kingdom");
-        airport2.setAirportCity(city2);
-        console.addAirport(airport2);
+        Scanner scanner = new Scanner(System.in);
 
-        Airport airport3 = new Airport();
-        airport3.setAirportName("JFK International Airport");
-        airport3.setAirportCode("JFK");
-        City city3 = new City();
-        city3.setName("New York");
-        city3.setCountry("United States");
-        airport3.setAirportCity(city3);
-        console.addAirport(airport3);
-
-        Airport airport4 = new Airport();
-        airport4.setAirportName("Charles de Gaulle Airport");
-        airport4.setAirportCode("CDG");
-        City city4 = new City();
-        city4.setName("Paris");
-        city4.setCountry("France");
-        airport4.setAirportCity(city4);
-        console.addAirport(airport4);
-
-        // Create aircrafts
-        Aircraft aircraft1 = new Aircraft(false, "Boeing 747");
-        Aircraft aircraft2 = new Aircraft(true, "Boeing 737");
-        Aircraft aircraft3 = new Aircraft(false, "Airbus A380");
-        Aircraft aircraft4 = new Aircraft(true, "Airbus A320");
-        Aircraft aircraft5 = new Aircraft(false, "Boeing 777");
-
-        // Create airlines
-        Airline airline1 = new Airline(
-            aircraft1, "British Airways"
-        );
-
-        Airline airline2 = new Airline(
-            aircraft2, "Virgin Atlantic"
-        );
-
-        Airline airline3 = new Airline(
-            aircraft3, "Delta Airlines"
-        );
-
-        Airline airline4 = new Airline(
-            aircraft4, "Air France"
-        );
-
-        Airline airline5 = new Airline(
-            aircraft5, "Lufthansa"
-        );
-
-        // Create flights
-        Flight flight1 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "BA123",
-            airport1,
-            airport3,
-            aircraft1,
-            airline1
-        );
-
-        Flight flight2 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "VS123",
-            airport2,
-            airport1,
-            aircraft2,
-            airline2
-        );
-
-        Flight flight3 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "DL123",
-            airport3,
-            airport4,
-            aircraft3,
-            airline3
-        );
-
-        Flight flight4 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "AF123",
-            airport4,
-            airport3,
-            aircraft4,
-            airline4
-        );
-
-        Flight flight5 = new PrivateFlight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "Private",
-            airport1,
-            airport3,
-            aircraft5,
-            airline5
-        );
-
-        // Add flights to console
-        console.addFlight(flight1);
-        console.addFlight(flight2);
-        console.addFlight(flight3);
-        console.addFlight(flight3);
-        console.addFlight(flight4);
-        console.addFlight(flight5);
-
-        // Add airports to console
-        console.addAirport(airport1);
-        console.addAirport(airport2);
-        console.addAirport(airport3);
-        console.addAirport(airport4);
-
-        // create clients
-        Actor client = new PublicClient();
-
-        Actor admin1 = new AirportAdmin(airport1, "airport@test.com", "airport123");
-
-        // add clients to console
-        System.out.println("\n====================================");
-        console.viewFlights(airport1, airport3, admin1);
-        System.out.println("\n====================================");
-        console.viewFlights(airport1, airport3, client);
-        System.out.println("\n====================================");
-
+        System.out.println("====================================");
+        System.out.println("\tAirline Simulation");
+        System.out.println("====================================\n");
         
+
+        while (true) {
+
+            System.out.println("\n============  Main Menu  ============");
+            System.out.println("Logged in as: " + console.getCurrentActor().getAuth() + "\n");
+            System.out.println("What would you like to do?");
+            System.out.println("1. Register as a client");
+            System.out.println("2. Login as a client");
+            System.out.println("3. View flights");
+            System.out.println("4. Register a flight");
+            System.out.println("5. Exit");
+            System.out.print("\nEnter choice: ");
+
+            int choice = scanner.nextInt();
+
+            // Validate choice
+            while (choice < 1 || choice > 5) {
+                System.out.println("Invalid choice");
+                System.out.print("\nEnter choice: ");
+                choice = scanner.nextInt();
+            }
+            
+            // Loop until user exits
+            System.out.println();
+
+            switch (choice) {
+                // Register as a client
+                case 1:
+                    System.out.print("Enter your email: ");
+                    String email = scanner.next();
+                    System.out.print("Enter your password: ");
+                    String password = scanner.next();
+
+                    // Check if email already exists
+                    if (console.clientExists(email)) {
+                        System.out.println("\nEmail already exists");
+                        break;
+                    }
+
+                    // Register client
+                    console.addRegisteredClient(
+                            new RegisteredClient(Auth.REGISTERED, true, true, false, email, password));
+                    System.out.println("Client registered successfully");
+
+                    // Login client
+                    console.login(email, password);
+                    System.out.println("Client logged in successful");
+                    System.out.println("");
+                    break;
+
+                // Login as a registered client
+                case 2:
+                    System.out.println("Enter your email: ");
+                    String loginEmail = scanner.next();
+                    System.out.println("Enter your password: ");
+                    String loginPassword = scanner.next();
+                    // Login client
+                    console.login(loginEmail, loginPassword);
+                    break;
+                
+                // View flights
+                case 3:
+                    // Display all airports
+                    System.out.println("Available Airports: ");
+                    for (Airport airport : console.getAirports()) {
+                        System.out.println("\t" + airport.getAirportName() + " - " + airport.getAirportCode());
+                    }
+                    // Ask user to input source airport code
+                    System.out.print("\nEnter source airport code (Eg. LOS): ");
+                    String source = scanner.next();
+
+                    // Validate source airport
+                    while (!console.airportExists(source)) {
+                        System.out.println("Invalid source airport");
+                        System.out.println("Enter source airport code (Eg. LOS): ");
+                        source = scanner.next();
+                    }
+
+                    // Ask user to input destination airport code
+                    System.out.print("Enter destination airport (Eg. JFK): ");
+                    String destination = scanner.next();
+
+                    // Validate destination airport
+                    while (!console.airportExists(destination) || destination.equals(source)) {
+                        // Check if destination is the same as source
+                        if (destination.equals(source)) {
+                            System.out.println("Source and destination airports cannot be the same");
+                        } else {
+                            System.out.println("Invalid destination airport");
+                        }
+                        System.out.println("Enter destination airport (Eg. LOS): ");
+                        destination = scanner.next();
+                    }
+
+                    System.out.println("");
+                    // Display flights
+                    console.viewFlights(console.getAirport(source), console.getAirport(destination),
+                            console.getCurrentActor());
+                    break;
+
+                // Register a flight
+                case 4:
+                    if (console.getCurrentActor().getAuth() != Auth.AIRLINE_ADMIN && console.getCurrentActor().getAuth() != Auth.AIRPORT_ADMIN){
+                        System.out.println("You do not have permission to register a flight");
+                        break;
+                    }
+
+                    System.out.println("Registering for a flight...");
+                    System.out.println("Enter flight number (Eg. AF123): ");
+                    String flightNumber = scanner.next();
+                    
+                    while (console.flightExists(flightNumber)) {
+                        System.out.print("\nFlight number already exists");
+                        System.out.print("\nEnter flight number (Eg. AF123): ");
+                        flightNumber = scanner.next();
+                    }
+
+                    System.out.print("\nEnter source airport code (Eg. LOS): ");
+                    String sourceAirport = scanner.next();
+                    
+                    while (!console.airportExists(sourceAirport)) {
+                        System.out.print("\nInvalid source airport");
+                        System.out.print("\nEnter source airport code (Eg. LOS): ");
+                        sourceAirport = scanner.next();
+                    }
+
+                    System.out.print("\nEnter destination airport code (Eg. JFK): ");
+                    String destinationAirport = scanner.next();
+
+                    while (!console.airportExists(destinationAirport) || destinationAirport.equals(sourceAirport)) {
+                        if (destinationAirport.equals(sourceAirport)) {
+                            System.out.println("Source and destination airports cannot be the same");
+                        } else {
+                            System.out.println("Invalid destination airport");
+                        }
+                        System.out.println("Enter destination airport code (Eg. JFK): ");
+                        destinationAirport = scanner.next();
+                    }
+
+                    System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
+                    String departureDate = scanner.next();
+
+                    System.out.print("\nEnter departure time (Eg. 15:00): ");
+                    String departureTime = scanner.next();
+
+                    String departureDateTime = departureDate + " " + departureTime;
+
+                    // Check if source airport has flights at departure date
+                    while (console.hasFlightsSource(departureDateTime, console.getAirport(sourceAirport))) {
+                        System.out.println("Flight time busy at source at: " + departureDate);
+                        System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
+                        departureDate = scanner.next();
+                        System.out.print("\nEnter departure time (Eg. 15:00): ");
+                        departureTime = scanner.next();
+                        departureDateTime = departureDate + " " + departureTime;
+                    }
+
+                    System.out.println("Enter arrival date (Eg. 2021-12-31): ");
+                    String arrivalDate = scanner.next();
+
+                    System.out.println("Enter arrival time (Eg. 15:00): ");
+                    String arrivalTime = scanner.next();
+
+                    String arrivalDateTime = arrivalDate + " " + arrivalTime;
+
+                    while (console.hasFlightsDestination(arrivalDateTime, console.getAirport(sourceAirport))) {
+                        System.out.println("Flight time busy at destination at: " + departureDate);
+                        System.out.println("Enter arrival date (Eg. 2021-12-31): ");
+                        arrivalDate = scanner.next();
+                        System.out.println("Enter arrival time (Eg. 15:00): ");
+                        arrivalTime = scanner.next();
+                        arrivalDateTime = departureDate + " " + departureTime;
+                    }
+
+                    System.out.println("Enter aircraft name: ");
+                    String aircraftName = scanner.next();
+
+                    System.out.println("Enter airline name: ");
+                    String airlineName = scanner.next();
+
+
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+
+        }
+
     }
 }
