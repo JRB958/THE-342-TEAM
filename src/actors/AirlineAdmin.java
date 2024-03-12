@@ -11,8 +11,9 @@ public class AirlineAdmin extends RegisteredClient{
         super(auth, registered, read, write, email, password);
     }
 
-    public AirlineAdmin(String email, String password) {
+    public AirlineAdmin(Airline airline, String email, String password) {
         super(Auth.AIRLINE_ADMIN, true, true, true, email, password);
+        this.airline = airline;
     }
 
     public AirlineAdmin() {

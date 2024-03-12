@@ -49,6 +49,22 @@ public class Flight {
         return source;
     }
 
+    public LocalDateTime getScheduledDepart() {
+        return scheduledDepart;
+    }
+
+    public LocalDateTime getScheduledArrival() {
+        return scheduledArrival;
+    }
+
+    public LocalDateTime getActualDepart() {
+        return actualDepart;
+    }
+
+    public LocalDateTime getActualArrival() {
+        return actualArrival;
+    }
+
     public String getFlightNumber() {
         return flightNumber;
     }
