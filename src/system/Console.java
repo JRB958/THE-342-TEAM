@@ -137,7 +137,6 @@ public class Console {
     }
 
     public boolean hasFlightsSource(String date, Airport source) {
-        // LocalDateTime dateTime = LocalDateTime.parse(date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         for (Flight flight : this.flights) {
             String formattedDate = flight.getScheduledDepart().format(formatter);
@@ -149,7 +148,6 @@ public class Console {
     }
 
     public boolean hasFlightsDestination(String date, Airport destination) {
-        // LocalDateTime dateTime = LocalDateTime.parse(date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         for (Flight flight : this.flights) {
             String formattedDate = flight.getScheduledArrival().format(formatter);
@@ -160,6 +158,17 @@ public class Console {
         return false;
     }
 
+    public Airport airportExist(String code){
+        for (Airport airport: airports){
+            if (airport.getAirportCode().equals(code));
+            return airport;
+        }
+        return null;
+    }
+
+    public Boolean aircraftExist(String aircraft){
+        return true;
+    }
 
     public void init() {
         System.out.println("Initializing console...");

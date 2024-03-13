@@ -1,10 +1,12 @@
 package misc;
 
+import airports.Airport;
 import flights.*;
 
 public class Aircraft {
     private Boolean inTransit;
     private String aircraftName;
+    private Airport hostingAiroport;
 
     public Aircraft() {
         this.inTransit = true;

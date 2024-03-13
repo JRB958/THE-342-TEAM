@@ -1,9 +1,13 @@
 package airports;
 import misc.City;
+import java.util.List;
+import misc.Aircraft;
+
 public class Airport{
     private String airportName;
     private String airportCode;
     private City airportCity;
+    private List<Aircraft> availableCrafts;
     
     public String getAirportName() {
         return airportName;
