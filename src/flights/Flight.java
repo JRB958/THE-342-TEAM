@@ -92,4 +92,13 @@ public class Flight {
     public Aircraft getAircraft() {
         return flightAircraft;
     }
+
+    @Override
+    public String toString() {
+        return "Flight [scheduledDepart=" + scheduledDepart + ", scheduledArrival=" + scheduledArrival
+                + ", actualDepart=" + actualDepart + ", actualArrival=" + actualArrival + ", flightNumber="
+                + flightNumber + ", source=" + source + ", destination=" + destination + ", handlerAirline="
+                + handlerAirline + ", flightAircraft=" + flightAircraft + "]";
+    }
+    
 }
