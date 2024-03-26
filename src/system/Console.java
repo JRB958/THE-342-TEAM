@@ -11,6 +11,7 @@ public class Console {
     private ArrayList<Airport> airports;
     private ArrayList<Flight> flights;
     private ArrayList<RegisteredClient> registeredClients;
+    private ArrayList<Airline> airlines;
     private Actor currentActor;
 
     public Console() {
@@ -18,6 +19,7 @@ public class Console {
         this.flights = new ArrayList<Flight>();
         this.registeredClients = new ArrayList<RegisteredClient>();
         this.currentActor = new PublicClient();
+        this.airlines = new ArrayList<Airline>();
     }
 
     public void addAirport(Airport airport) {
@@ -77,6 +79,37 @@ public class Console {
 
     public Actor getCurrentActor() {
         return this.currentActor;
+    }
+
+    public Aircraft getAircraft(String aircraftName) {
+        for (Flight flight : this.flights) {
+            if (flight.getAircraft().getAircraftName().equals(aircraftName)) {
+                return flight.getAircraft();
+            }
+        }
+        return null;
+    }
+
+    public Boolean airlineExists(String airlineName) {
+        for (Airline airline : this.airlines) {
+            if (airline.getAirlineName().equals(airlineName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Airline getAirline(String airlineName) {
+        for (Airline airline : this.airlines) {
+            if (airline.getAirlineName().equals(airlineName)) {
+                return airline;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Flight> getFlights(){
+        return this.flights;
     }
 
     public void login(String email, String password) {
@@ -166,7 +199,12 @@ public class Console {
         return null;
     }
 
-    public Boolean aircraftExist(String aircraft){
+    public Boolean aircraftExist(String aircraft, Airport airport){
+        return true;
+        
+    }
+
+    public Boolean airlineExist(String airline){
         return true;
     }
 
@@ -211,33 +249,44 @@ public class Console {
         airport4.setAirportCity(city4);
         this.addAirport(airport4);
 
-        // Create aircrafts
+        // Create aircrafts and link some to an airport
         Aircraft aircraft1 = new Aircraft(false, "Boeing 747");
+        aircraft1.setHostingAirport(airport1);
+        airport1.addAircraft(aircraft1);
+
         Aircraft aircraft2 = new Aircraft(true, "Boeing 737");
+        aircraft2.setHostingAirport(airport2);
+        airport2.addAircraft(aircraft2);
+
         Aircraft aircraft3 = new Aircraft(false, "Airbus A380");
+        aircraft3.setHostingAirport(airport3);
+        airport3.addAircraft(aircraft3);
+
         Aircraft aircraft4 = new Aircraft(true, "Airbus A320");
+        aircraft4.setHostingAirport(airport4);
+        airport4.addAircraft(aircraft4);
+
         Aircraft aircraft5 = new Aircraft(false, "Boeing 777");
+        aircraft5.setHostingAirport(airport1);
+        airport1.addAircraft(aircraft5);
 
-        // Create airlines
-        Airline airline1 = new Airline(
-            aircraft1, "British Airways"
-        );
+        // Create airlines and register them in the console and buy an aircraft
+        Airline airline1 = new Airline(aircraft1, "British Airways");
+        this.airlines.add(airline1);
+        airline1.buyAnAircraft(aircraft1);
 
-        Airline airline2 = new Airline(
-            aircraft2, "Virgin Atlantic"
-        );
+        Airline airline2 = new Airline(aircraft2, "Virgin Atlantic");
+        this.airlines.add(airline2);
+        airline1.buyAnAircraft(aircraft2);
 
-        Airline airline3 = new Airline(
-            aircraft3, "Delta Airlines"
-        );
+        Airline airline3 = new Airline(aircraft3, "Delta Airlines");
+        this.airlines.add(airline3);
 
-        Airline airline4 = new Airline(
-            aircraft4, "Air France"
-        );
+        Airline airline4 = new Airline(aircraft4, "Air France");
+        this.airlines.add(airline4);
 
-        Airline airline5 = new Airline(
-            aircraft5, "Lufthansa"
-        );
+        Airline airline5 = new Airline(aircraft5, "Lufthansa");
+        this.airlines.add(airline5);
 
         // Create flights
         Flight flight1 = new Flight(
@@ -250,7 +299,8 @@ public class Console {
             airport3,
             aircraft1,
             airline1
-        );
+            );
+        this.addFlight(flight1);
 
         Flight flight2 = new Flight(
             LocalDateTime.parse("2021-12-12T12:00:00"),
@@ -263,6 +313,7 @@ public class Console {
             aircraft2,
             airline2
         );
+        this.addFlight(flight2);
 
         Flight flight3 = new Flight(
             LocalDateTime.parse("2021-12-12T12:00:00"),
@@ -275,6 +326,7 @@ public class Console {
             aircraft3,
             airline3
         );
+        this.addFlight(flight3);
 
         Flight flight4 = new Flight(
             LocalDateTime.parse("2021-12-12T12:00:00"),
@@ -287,6 +339,7 @@ public class Console {
             aircraft4,
             airline4
         );
+        this.addFlight(flight4);
 
         Flight flight5 = new PrivateFlight(
             LocalDateTime.parse("2021-12-12T12:00:00"),
@@ -299,11 +352,6 @@ public class Console {
             aircraft5,
             airline5
         );
-
-        this.addFlight(flight1);
-        this.addFlight(flight2);
-        this.addFlight(flight3);
-        this.addFlight(flight4);
         this.addFlight(flight5);
 
         AirlineAdmin airlineAdmin = new AirlineAdmin(airline1, "airline", "airline");

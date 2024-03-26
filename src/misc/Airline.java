@@ -36,4 +36,13 @@ public class Airline {
     public void buyAnAircraft(Aircraft aircraft){
         fleet.add(aircraft);
     }
+
+    public Boolean ownsAircraft(String aircraftName){
+        for (Aircraft aircraft : this.fleet){
+            if (aircraft.getAircraftName().equalsIgnoreCase(aircraftName)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -6,7 +6,7 @@ import flights.*;
 public class Aircraft {
     private Boolean inTransit;
     private String aircraftName;
-    private Airport hostingAiroport;
+    private Airport hostingAirport;
 
     public Aircraft() {
         this.inTransit = true;
@@ -15,6 +15,10 @@ public class Aircraft {
     public Aircraft(Boolean inTransit, String aircraftName) {
         this.inTransit = inTransit;
         this.aircraftName = aircraftName;
+    }
+
+    public void setHostingAirport(Airport airport){
+        this.hostingAirport = airport;
     }
 
     public Boolean getInTransit() {
@@ -35,6 +39,6 @@ public class Aircraft {
 
     @Override
     public String toString() {
-        return "Aircraft [inTransit=" + inTransit + "]";
+        return "Aircraft [inTransit=" + inTransit + ", aircraftName=" + aircraftName + "]";
     }
 }
