@@ -1,2 +1,4 @@
 # ignore complied class files
 *.class
+.DS_Store
+.idea
