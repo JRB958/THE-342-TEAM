@@ -1,8 +1,19 @@
 package misc;
 public class City {
+    private int cityID;
     private String name;
     private String country;
     private double temp;
+
+    public City(int cityID, String name, String country, double temp) {
+        this.cityID = cityID;
+        this.name = name;
+        this.country = country;
+        this.temp = temp;
+    }
+    public int getCityID() {
+        return cityID;
+    }
     public String getName() {
         return name;
     }
