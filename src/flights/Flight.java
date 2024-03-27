@@ -161,6 +161,14 @@ public class Flight {
         this.type = type;
     }
 
+    // public Aircraft getAircraft() {
+    //     return flightAircraft;
+    // }
+
+    // public Airline getAirline() {
+    //     return handlerAirline;
+    // }
+
     @Override
     public String toString() {
         return "Flight [scheduledDepart=" + scheduledDepart + ", scheduledArrival=" + scheduledArrival

@@ -5,6 +5,7 @@ import misc.*;
 public class AirlineAdmin extends RegisteredClient{
 
     private int airlineAdminID;
+    private int airlineID;
     private Airline airline;
 
 
@@ -35,5 +36,13 @@ public class AirlineAdmin extends RegisteredClient{
 
     public AirlineAdmin() {
         super(Auth.AIRLINE_ADMIN, true, true, true, "", "");
+    }
+
+    public int getAirlineID() {
+        return airlineID;
+    }
+
+    public void setAirlineID(int airlineID) {
+        this.airlineID = airlineID;
     }
 }

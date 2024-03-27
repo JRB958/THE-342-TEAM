@@ -11,6 +11,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import actors.Actor;
+import actors.AirlineAdmin;
+import actors.AirportAdmin;
 import actors.Auth;
 import actors.RegisteredClient;
 import airports.Airport;
@@ -58,9 +60,10 @@ public class SQLiteConnection {
 
                 Flight flight = new Flight();
                 flight.setFlightID(resultSet.getInt("FlightID"));
-                flight.setScheduledDepart(LocalDateTime.parse(resultSet.getString("ScheduledDepartureTime"), formatter));
+                flight.setScheduledDepart(
+                        LocalDateTime.parse(resultSet.getString("ScheduledDepartureTime"), formatter));
                 flight.setScheduledArrival(LocalDateTime.parse(resultSet.getString("ScheduledArrivalTime"), formatter));
-                flight.setActualDepart(LocalDateTime.parse(resultSet.getString("ActualDepartureTime"),  formatter));
+                flight.setActualDepart(LocalDateTime.parse(resultSet.getString("ActualDepartureTime"), formatter));
                 flight.setActualArrival(LocalDateTime.parse(resultSet.getString("ActualArrivalTime"), formatter));
                 flight.setFlightNumber(resultSet.getString("FlightCode"));
                 flight.setSourceID(resultSet.getInt("SourceAirportID"));
@@ -183,14 +186,49 @@ public class SQLiteConnection {
                 PreparedStatement pstmt = connection.prepareStatement(query)) {
             ResultSet resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
-                RegisteredClient registeredClient = new RegisteredClient();
 
-                registeredClient.setClientID(resultSet.getInt("ActorID"));
-                registeredClient.setEmail(resultSet.getString("Email"));
-                registeredClient.setPassword(resultSet.getString("Password"));
-                registeredClient.setAuth(Auth.valueOf(resultSet.getString("Type")));
+                // Check if the client is an airline admin
+                if (resultSet.getString("Type").equalsIgnoreCase("AIRLINE_ADMIN")) {
+                    AirlineAdmin registeredClient = new AirlineAdmin();
 
-                registeredClients.put(registeredClient.getClientID(), registeredClient);
+                    registeredClient.setClientID(resultSet.getInt("ActorID"));
+                    registeredClient.setEmail(resultSet.getString("Email"));
+                    registeredClient.setPassword(resultSet.getString("Password"));
+                    registeredClient.setAuth(Auth.valueOf(resultSet.getString("Type")));
+
+                    PreparedStatement clientPstmt = connection
+                            .prepareStatement("SELECT AirlineID FROM AirlineAdmin WHERE ActorID = ?");
+                    clientPstmt.setInt(1, registeredClient.getClientID());
+                    ResultSet clientResultSet = clientPstmt.executeQuery();
+
+                    registeredClient.setAirlineID(clientResultSet.getInt("AirlineID"));
+                    registeredClients.put(registeredClient.getClientID(), registeredClient);
+
+                } else if (resultSet.getString("Type").equalsIgnoreCase("AIRPORT_ADMIN")) {
+                    // Check if the client is an airport admin
+                    AirportAdmin registeredClient = new AirportAdmin();
+
+                    registeredClient.setClientID(resultSet.getInt("ActorID"));
+                    registeredClient.setEmail(resultSet.getString("Email"));
+                    registeredClient.setPassword(resultSet.getString("Password"));
+                    registeredClient.setAuth(Auth.valueOf(resultSet.getString("Type")));
+
+                    PreparedStatement clientPstmt = connection
+                            .prepareStatement("SELECT AirportID FROM AirportAdmin WHERE ActorID = ?");
+                    clientPstmt.setInt(1, registeredClient.getClientID());
+                    ResultSet clientResultSet = clientPstmt.executeQuery();
+
+                    registeredClient.setAirportID(clientResultSet.getInt("AirportID"));
+                    registeredClients.put(registeredClient.getClientID(), registeredClient);
+                } else {
+                    // Otherwise, the client is a registered client
+                    RegisteredClient registeredClient = new RegisteredClient();
+                    registeredClient.setClientID(resultSet.getInt("ActorID"));
+                    registeredClient.setEmail(resultSet.getString("Email"));
+                    registeredClient.setPassword(resultSet.getString("Password"));
+                    registeredClient.setAuth(Auth.valueOf(resultSet.getString("Type")));
+                    registeredClients.put(registeredClient.getClientID(), registeredClient);
+                }
             }
         } catch (SQLException e) {
             System.err.println("Error querying SQLite database: " + e.getMessage());
@@ -198,36 +236,64 @@ public class SQLiteConnection {
         return registeredClients;
     }
 
-    public static void viewFlights(String sourceAirportCode, String destinationAirportCode, String userType) {
-        String query = "SELECT Flight.FlightNumber, SourceAirport.AirportName AS SourceAirport, " +
-                "DestinationAirport.AirportName AS DestinationAirport " +
-                "FROM Flight " +
-                "JOIN Airport AS SourceAirport ON Flight.SourceAirportID = SourceAirport.AirportID " +
-                "JOIN Airport AS DestinationAirport ON Flight.DestinationAirportID = DestinationAirport.AirportID " +
-                "WHERE SourceAirport.AirportCode = ? AND DestinationAirport.AirportCode = ?";
-
-        if (!userType.equalsIgnoreCase("REGISTERED")) {
-            query += " AND Flight.Type = 'Private'";
-        }
+    public static void insertFlight(Flight flight) {
+        String query = "INSERT INTO Flight (ScheduledDepartureTime, ScheduledArrivalTime, ActualDepartureTime, ActualArrivalTime, FlightCode, SourceAirportID, DestinationAirportID, AirlineID, AircraftID, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = getConnection();
                 PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, sourceAirportCode);
-            pstmt.setString(2, destinationAirportCode);
-
-            ResultSet resultSet = pstmt.executeQuery();
-            while (resultSet.next()) {
-                System.out.println("Flight Number: " + resultSet.getString("FlightNumber") +
-                        ", Source Airport: " + resultSet.getString("SourceAirport") +
-                        ", Destination Airport: " + resultSet.getString("DestinationAirport"));
-            }
+            pstmt.setString(1, flight.getScheduledDepart().toString());
+            pstmt.setString(2, flight.getScheduledArrival().toString());
+            pstmt.setString(3, flight.getActualDepart().toString());
+            pstmt.setString(4, flight.getActualArrival().toString());
+            pstmt.setString(5, flight.getFlightNumber());
+            pstmt.setInt(6, flight.getSourceID());
+            pstmt.setInt(7, flight.getDestinationID());
+            pstmt.setInt(8, flight.getAirlineID());
+            pstmt.setInt(9, flight.getAircraftID());
+            pstmt.setString(10, flight.getType());
+            pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error querying SQLite database: " + e.getMessage());
+            System.err.println("Error inserting into SQLite database: " + e.getMessage());
         }
     }
 
-    public static void main(String[] args) {
+    static public void insertRegisteredClient(RegisteredClient client) {
+        String query = "INSERT INTO Actor (Email, Password, Type) VALUES (?, ?, ?)";
 
+        try (Connection connection = getConnection();
+                PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, client.getEmail());
+            pstmt.setString(2, client.getPassword());
+            pstmt.setString(3, client.getAuth().toString());
+            pstmt.executeUpdate();
+
+            if (client.getAuth() == Auth.AIRLINE_ADMIN) {
+                PreparedStatement airlinePstmt = connection.prepareStatement("INSERT INTO AirlineAdmin (ActorID, AirlineID) VALUES (?, ?)");
+                airlinePstmt.setInt(1, client.getClientID());
+                airlinePstmt.setInt(2, ((AirlineAdmin) client).getAirlineID());
+                airlinePstmt.executeUpdate();
+            } else if (client.getAuth() == Auth.AIRPORT_ADMIN) {
+                PreparedStatement airportPstmt = connection.prepareStatement("INSERT INTO AirportAdmin (ActorID, AirportID) VALUES (?, ?)");
+                airportPstmt.setInt(1, client.getClientID());
+                airportPstmt.setInt(2, ((AirportAdmin) client).getAirportID());
+                airportPstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.err.println("Error inserting into SQLite database: " + e.getMessage());
+        }
     }
 
+    static public void insertAirport(Airport airport) {
+        String query = "INSERT INTO Airport (AirportName, AirportCode, CityID) VALUES (?, ?, ?)";
+
+        try (Connection connection = getConnection();
+                PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, airport.getAirportName());
+            pstmt.setString(2, airport.getAirportCode());
+            pstmt.setInt(3, airport.getCityID());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error inserting into SQLite database: " + e.getMessage());
+        }
+    }
 }
