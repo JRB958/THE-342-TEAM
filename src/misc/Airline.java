@@ -2,9 +2,22 @@ package misc;
 import java.util.ArrayList;
 import java.util.List;
 public class Airline {
+    
     private List<Aircraft> fleet;
-
+    private int airlineID;
     private String airlineName;
+
+    public Airline(){
+        fleet = new ArrayList<>();
+    }
+
+    public int getAirlineID() {
+        return airlineID;
+    }
+
+    public void setAirlineID(int airlineID) {
+        this.airlineID = airlineID;
+    }
 
     // instantiate an airline with at least one aircaft
     public Airline(Aircraft aircraft, String airlineName){
@@ -44,5 +57,9 @@ public class Airline {
             }
         }
         return false;
+    }
+
+    public void addAircraft(Aircraft aircraft){
+        fleet.add(aircraft);
     }
 }

@@ -9,9 +9,18 @@ public class Airport{
     private int airportID;
     private String airportName;
     private String airportCode;
+    private int cityID;
     private City airportCity;
     public void setAirportID(int airportID) {
         this.airportID = airportID;
+    }
+
+    public int getCityID() {
+        return cityID;
+    }
+
+    public void setCityID(int cityID) {
+        this.cityID = cityID;
     }
 
     public List<Aircraft> getFleet() {

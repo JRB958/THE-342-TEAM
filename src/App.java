@@ -15,7 +15,7 @@ public class App {
 
         // Initilizing console for testing purposes
         Console console = new Console();
-        // console.init();
+        console.init();
 
         Scanner scanner = new Scanner(System.in);
 

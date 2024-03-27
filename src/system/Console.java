@@ -4,8 +4,10 @@ import flights.*;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import actors.*;
 import misc.*;
+import sqlite.SQLiteConnection;
 
 public class Console {
     private ArrayList<Airport> airports;
@@ -211,151 +213,50 @@ public class Console {
     public void init() {
         System.out.println("Initializing console...");
 
-        System.out.println("Creating default airports, airlines, aircrafts and flights...");
-        Airport airport1 = new Airport();
-        airport1.setAirportName("Murtala Muhammed International Airport");
-        airport1.setAirportCode("LOS");
-        City city1 = new City();
-        city1.setName("Lagos");
-        city1.setCountry("Nigeria");
-        airport1.setAirportCity(city1);
-        this.addAirport(airport1);
+        System.out.println("Creating airports, airlines, aircrafts and flights from db...");
         
+        // Create airports
+        HashMap<Integer, City> cities= SQLiteConnection.getCities();
+        HashMap<Integer, Airport> airports = SQLiteConnection.getAirports();
+        
+        for (Airport airport : airports.values()){
+            City city = cities.get(airport.getCityID());
+            airport.setAirportCity(city);
+            this.addAirport(airport);
+        }
 
-        Airport airport2 = new Airport();
-        airport2.setAirportName("Heathrow Airport");
-        airport2.setAirportCode("LHR");
-        City city2 = new City();
-        city2.setName("London");
-        city2.setCountry("United Kingdom");
-        airport2.setAirportCity(city2);
-        this.addAirport(airport2);
+        // Create airlines
+        HashMap<Integer, Airline> airlines = SQLiteConnection.getAirlines();
+        for (Airline airline : airlines.values()){
+            this.airlines.add(airline);
+        }
 
-        Airport airport3 = new Airport();
-        airport3.setAirportName("JFK International Airport");
-        airport3.setAirportCode("JFK");
-        City city3 = new City();
-        city3.setName("New York");
-        city3.setCountry("United States");
-        airport3.setAirportCity(city3);
-        this.addAirport(airport3);
-
-        Airport airport4 = new Airport();
-        airport4.setAirportName("Charles de Gaulle Airport");
-        airport4.setAirportCode("CDG");
-        City city4 = new City();
-        city4.setName("Paris");
-        city4.setCountry("France");
-        airport4.setAirportCity(city4);
-        this.addAirport(airport4);
-
-        // Create aircrafts and link some to an airport
-        Aircraft aircraft1 = new Aircraft(false, "Boeing 747");
-        aircraft1.setHostingAirport(airport1);
-        airport1.addAircraft(aircraft1);
-
-        Aircraft aircraft2 = new Aircraft(true, "Boeing 737");
-        aircraft2.setHostingAirport(airport2);
-        airport2.addAircraft(aircraft2);
-
-        Aircraft aircraft3 = new Aircraft(false, "Airbus A380");
-        aircraft3.setHostingAirport(airport3);
-        airport3.addAircraft(aircraft3);
-
-        Aircraft aircraft4 = new Aircraft(true, "Airbus A320");
-        aircraft4.setHostingAirport(airport4);
-        airport4.addAircraft(aircraft4);
-
-        Aircraft aircraft5 = new Aircraft(false, "Boeing 777");
-        aircraft5.setHostingAirport(airport1);
-        airport1.addAircraft(aircraft5);
-
-        // Create airlines and register them in the console and buy an aircraft
-        Airline airline1 = new Airline(aircraft1, "British Airways");
-        this.airlines.add(airline1);
-        airline1.buyAnAircraft(aircraft1);
-
-        Airline airline2 = new Airline(aircraft2, "Virgin Atlantic");
-        this.airlines.add(airline2);
-        airline1.buyAnAircraft(aircraft2);
-
-        Airline airline3 = new Airline(aircraft3, "Delta Airlines");
-        this.airlines.add(airline3);
-
-        Airline airline4 = new Airline(aircraft4, "Air France");
-        this.airlines.add(airline4);
-
-        Airline airline5 = new Airline(aircraft5, "Lufthansa");
-        this.airlines.add(airline5);
+        // Create aircrafts
+        HashMap<Integer, Aircraft> aircrafts = SQLiteConnection.getAircrafts();
+        for (Aircraft aircraft : aircrafts.values()){
+            aircraft.setHostingAirport(airports.get(aircraft.getHostingAirportID()));
+            airlines.get(aircraft.getAirlineID()).addAircraft(aircraft);
+        }
 
         // Create flights
-        Flight flight1 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "BA123",
-            airport1,
-            airport3,
-            aircraft1,
-            airline1
-            );
-        this.addFlight(flight1);
+        HashMap<Integer, Flight> flights = SQLiteConnection.getFlights();
+        for (Flight flight : flights.values()){
+            flight.setSource(airports.get(flight.getSourceID()));
+            flight.setDestination(airports.get(flight.getDestinationID()));
+            flight.setHandlerAirline(airlines.get(flight.getAirlineID()));
+            flight.setFlightAircraft(aircrafts.get(flight.getAircraftID()));
+            this.addFlight(flight);
+        }
 
-        Flight flight2 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "VS123",
-            airport2,
-            airport1,
-            aircraft2,
-            airline2
-        );
-        this.addFlight(flight2);
+        // Create registered clients
+        HashMap<Integer, RegisteredClient> clients = SQLiteConnection.getRegisteredClients();
+        for (RegisteredClient client : clients.values()){
+            this.addRegisteredClient(client);
+        }
 
-        Flight flight3 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "DL123",
-            airport3,
-            airport4,
-            aircraft3,
-            airline3
-        );
-        this.addFlight(flight3);
-
-        Flight flight4 = new Flight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "AF123",
-            airport4,
-            airport3,
-            aircraft4,
-            airline4
-        );
-        this.addFlight(flight4);
-
-        Flight flight5 = new PrivateFlight(
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            LocalDateTime.parse("2021-12-12T12:00:00"),
-            LocalDateTime.parse("2021-12-12T18:00:00"),
-            "Private",
-            airport1,
-            airport3,
-            aircraft5,
-            airline5
-        );
-        this.addFlight(flight5);
-
-        AirlineAdmin airlineAdmin = new AirlineAdmin(airline1, "airline", "airline");
-        this.addRegisteredClient(airlineAdmin);
+        for (Flight flight : this.flights){
+            System.out.println(flight.toString());
+        }
 
         System.out.println("Console initialized");
     }
