@@ -85,8 +85,8 @@ public class Console {
 
     public Aircraft getAircraft(String aircraftName) {
         for (Flight flight : this.flights) {
-            if (flight.getAircraft().getAircraftName().equals(aircraftName)) {
-                return flight.getAircraft();
+            if (flight.getFlightAircraft().getAircraftName().equals(aircraftName)) {
+                return flight.getFlightAircraft();
             }
         }
         return null;
@@ -166,8 +166,8 @@ public class Console {
                 || auth == Auth.ADMIN) {
             System.out.println("Flight " + flight.getFlightNumber() + ": \n\t" + flight.getSource().getAirportName()
                     + " to " + flight.getDestination().getAirportName() + "\n\tAirline: "
-                    + flight.getAirline().getAirlineName()
-                    + "\n\tAircraft: " + flight.getAircraft().getAircraftName() + "\n");
+                    + flight.getHandlerAirline().getAirlineName()
+                    + "\n\tAircraft: " + flight.getFlightAircraft().getAircraftName() + "\n");
         }
     }
 
@@ -212,34 +212,43 @@ public class Console {
 
     public void init() {
         System.out.println("Initializing console...");
-
+    
         System.out.println("Creating airports, airlines, aircrafts and flights from db...");
         
-        // Create airports
+        // Retrieve cities from the database and store them in a HashMap
         HashMap<Integer, City> cities= SQLiteConnection.getCities();
+    
+        // Retrieve airports from the database and store them in a HashMap
         HashMap<Integer, Airport> airports = SQLiteConnection.getAirports();
         
+        // Set the city for each airport and add the airport to the console
         for (Airport airport : airports.values()){
             City city = cities.get(airport.getCityID());
             airport.setAirportCity(city);
             this.addAirport(airport);
         }
-
-        // Create airlines
+    
+        // Retrieve airlines from the database and store them in a HashMap
         HashMap<Integer, Airline> airlines = SQLiteConnection.getAirlines();
+    
+        // Add each airline to the console
         for (Airline airline : airlines.values()){
             this.airlines.add(airline);
         }
-
-        // Create aircrafts
+    
+        // Retrieve aircrafts from the database and store them in a HashMap
         HashMap<Integer, Aircraft> aircrafts = SQLiteConnection.getAircrafts();
+    
+        // Set the hosting airport for each aircraft and add the aircraft to its airline
         for (Aircraft aircraft : aircrafts.values()){
             aircraft.setHostingAirport(airports.get(aircraft.getHostingAirportID()));
             airlines.get(aircraft.getAirlineID()).addAircraft(aircraft);
         }
-
-        // Create flights
+    
+        // Retrieve flights from the database and store them in a HashMap
         HashMap<Integer, Flight> flights = SQLiteConnection.getFlights();
+    
+        // Set the source, destination, handler airline, and aircraft for each flight and add the flight to the console
         for (Flight flight : flights.values()){
             flight.setSource(airports.get(flight.getSourceID()));
             flight.setDestination(airports.get(flight.getDestinationID()));
@@ -247,18 +256,17 @@ public class Console {
             flight.setFlightAircraft(aircrafts.get(flight.getAircraftID()));
             this.addFlight(flight);
         }
-
-        // Create registered clients
+    
+        // Retrieve registered clients from the database and store them in a HashMap
         HashMap<Integer, RegisteredClient> clients = SQLiteConnection.getRegisteredClients();
+    
+        // Add each registered client to the console
         for (RegisteredClient client : clients.values()){
             this.addRegisteredClient(client);
         }
-
-        for (Flight flight : this.flights){
-            System.out.println(flight.toString());
-        }
-
+    
         System.out.println("Console initialized");
     }
+    
 
 }
