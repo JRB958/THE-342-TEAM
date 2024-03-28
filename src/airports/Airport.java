@@ -40,6 +40,13 @@ public class Airport{
         fleet = new ArrayList<>();
     }
 
+    public Airport(String airportName, String airportCode, City airportCity) {
+        this.airportName = airportName;
+        this.airportCode = airportCode;
+        this.airportCity = airportCity;
+        fleet = new ArrayList<>();
+    }
+
     public Airport() {
         fleet = new ArrayList<>();
     }
