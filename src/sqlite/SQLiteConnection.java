@@ -236,7 +236,7 @@ public class SQLiteConnection {
         return registeredClients;
     }
 
-    public static void insertFlight(Flight flight) {
+    static public void insertFlight(Flight flight) {
         String query = "INSERT INTO Flight (ScheduledDepartureTime, ScheduledArrivalTime, ActualDepartureTime, ActualArrivalTime, FlightCode, SourceAirportID, DestinationAirportID, AirlineID, AircraftID, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = getConnection();
@@ -267,33 +267,88 @@ public class SQLiteConnection {
             pstmt.setString(3, client.getAuth().toString());
             pstmt.executeUpdate();
 
+            PreparedStatement returnPstmt = connection.prepareStatement("SELECT last_insert_rowid()");
+            ResultSet resultSet = returnPstmt.executeQuery();
+            if (resultSet.next()) {
+                client.setClientID(resultSet.getInt(1));
+            }
+
             if (client.getAuth() == Auth.AIRLINE_ADMIN) {
                 PreparedStatement airlinePstmt = connection.prepareStatement("INSERT INTO AirlineAdmin (ActorID, AirlineID) VALUES (?, ?)");
                 airlinePstmt.setInt(1, client.getClientID());
                 airlinePstmt.setInt(2, ((AirlineAdmin) client).getAirlineID());
                 airlinePstmt.executeUpdate();
+
+                PreparedStatement returnPstmt2 = connection.prepareStatement("SELECT last_insert_rowid()");
+                ResultSet resultSet2 = returnPstmt2.executeQuery();
+                if (resultSet2.next()) {
+                    ((AirlineAdmin) client).setAirlineAdminID(resultSet2.getInt(1));
+                }
             } else if (client.getAuth() == Auth.AIRPORT_ADMIN) {
                 PreparedStatement airportPstmt = connection.prepareStatement("INSERT INTO AirportAdmin (ActorID, AirportID) VALUES (?, ?)");
                 airportPstmt.setInt(1, client.getClientID());
                 airportPstmt.setInt(2, ((AirportAdmin) client).getAirportID());
                 airportPstmt.executeUpdate();
+
+                PreparedStatement returnPstmt2 = connection.prepareStatement("SELECT last_insert_rowid()");
+                ResultSet resultSet2 = returnPstmt2.executeQuery();
+                if (resultSet2.next()) {
+                    ((AirportAdmin) client).setAirportAdminID(resultSet2.getInt(1));
+                }
             }
         } catch (SQLException e) {
             System.err.println("Error inserting into SQLite database: " + e.getMessage());
         }
     }
 
-    static public void insertAirport(Airport airport) {
+    public static void insertAirport(Airport airport) {
         String query = "INSERT INTO Airport (AirportName, AirportCode, CityID) VALUES (?, ?, ?)";
-
+    
         try (Connection connection = getConnection();
-                PreparedStatement pstmt = connection.prepareStatement(query)) {
+             PreparedStatement pstmt = connection.prepareStatement(query);
+             PreparedStatement returnPstmt = connection.prepareStatement("SELECT last_insert_rowid()")) {
+    
             pstmt.setString(1, airport.getAirportName());
             pstmt.setString(2, airport.getAirportCode());
             pstmt.setInt(3, airport.getCityID());
             pstmt.executeUpdate();
+    
+            try (ResultSet resultSet = returnPstmt.executeQuery()) {
+                if (resultSet.next()) {
+                    airport.setAirportID(resultSet.getInt(1));
+                }
+            }
+    
         } catch (SQLException e) {
             System.err.println("Error inserting into SQLite database: " + e.getMessage());
+            // Consider additional error handling here
         }
     }
+    
+    public static void insertCity(City cityObj) {
+        String query = "INSERT INTO City (Name, Country, Temp) VALUES (?, ?, ?)";
+    
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query);
+             PreparedStatement returnPstmt = connection.prepareStatement("SELECT last_insert_rowid()")) {
+    
+            pstmt.setString(1, cityObj.getName());
+            pstmt.setString(2, cityObj.getCountry());
+            pstmt.setDouble(3, cityObj.getTemp());
+            pstmt.executeUpdate();
+    
+            try (ResultSet resultSet = returnPstmt.executeQuery()) {
+                if (resultSet.next()) {
+                    cityObj.setCityID(resultSet.getInt(1));
+                }
+            }
+    
+        } catch (SQLException e) {
+            System.err.println("Error inserting into SQLite database: " + e.getMessage());
+            // Consider additional error handling here
+        }
+
+        System.out.println("successfully inserted city with ID: " + cityObj.getCityID());
+    }
+    
 }
