@@ -18,6 +18,7 @@ public class PrivateFlight extends Flight{
         String flightNumber,
         Airport source,
         Airport destination,
+        Airport handlerAirport,
         Aircraft aircraft,
         Airline airline) 
         {
@@ -31,7 +32,7 @@ public class PrivateFlight extends Flight{
             destination,
             aircraft,
             airline);
-            this.handlerAirport = source;
+            this.handlerAirport = handlerAirport;
         }
 
 
