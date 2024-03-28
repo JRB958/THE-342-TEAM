@@ -6,10 +6,46 @@ import java.util.List;
 import misc.Aircraft;
 
 public class Airport{
+    private int airportID;
     private String airportName;
     private String airportCode;
+    private int cityID;
     private City airportCity;
+    public void setAirportID(int airportID) {
+        this.airportID = airportID;
+    }
+
+    public int getCityID() {
+        return cityID;
+    }
+
+    public void setCityID(int cityID) {
+        this.cityID = cityID;
+    }
+
+    public List<Aircraft> getFleet() {
+        return fleet;
+    }
+
+    public void setFleet(List<Aircraft> fleet) {
+        this.fleet = fleet;
+    }
     private List<Aircraft> fleet;
+
+    public Airport(int airportID, String airportName, String airportCode, City airportCity) {
+        this.airportID = airportID;
+        this.airportName = airportName;
+        this.airportCode = airportCode;
+        this.airportCity = airportCity;
+        fleet = new ArrayList<>();
+    }
+
+    public Airport(String airportName, String airportCode, City airportCity) {
+        this.airportName = airportName;
+        this.airportCode = airportCode;
+        this.airportCity = airportCity;
+        fleet = new ArrayList<>();
+    }
 
     public Airport() {
         fleet = new ArrayList<>();
@@ -31,6 +67,9 @@ public class Airport{
     }
     public void setAirportCity(City airportCity) {
         this.airportCity = airportCity;
+    }
+    public int getAirportID() {
+        return airportID;
     }
     public Boolean aircraftExist(String aircraftName){
         for (Aircraft aircraft : this.fleet){

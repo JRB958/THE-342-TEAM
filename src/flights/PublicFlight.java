@@ -17,7 +17,8 @@ public class PublicFlight extends Flight{
         Airport source,
         Airport destination,
         Aircraft aircraft,
-        Airline airline) 
+        Airline airline,
+        String type) 
         {
             super(
             scheduledDepart,
@@ -29,5 +30,6 @@ public class PublicFlight extends Flight{
             destination,
             aircraft,
             airline);
+            super.setType(type);
         }
 }

@@ -18,8 +18,10 @@ public class PrivateFlight extends Flight{
         String flightNumber,
         Airport source,
         Airport destination,
+        Airport handlerAirport,
         Aircraft aircraft,
-        Airline airline) 
+        Airline airline,
+        String type) 
         {
             super(
             scheduledDepart,
@@ -31,7 +33,8 @@ public class PrivateFlight extends Flight{
             destination,
             aircraft,
             airline);
-            this.handlerAirport = source;
+            super.setType(type);
+            this.handlerAirport = handlerAirport;
         }
 
 

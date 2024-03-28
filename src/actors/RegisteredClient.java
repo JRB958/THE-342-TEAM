@@ -1,6 +1,7 @@
 package actors;
 
 public class RegisteredClient extends Actor{
+    private int clientID;
     private String email;
     private String password;
 
@@ -36,5 +37,13 @@ public class RegisteredClient extends Actor{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getClientID() {
+        return clientID;
+    }
+
+    public void setClientID(int clientID) {
+        this.clientID = clientID;
     }
 }

@@ -4,8 +4,26 @@ import misc.*;
 
 public class AirlineAdmin extends RegisteredClient{
 
+    private int airlineAdminID;
+    private int airlineID;
     private Airline airline;
 
+
+    public int getAirlineAdminID() {
+        return airlineAdminID;
+    }
+
+    public void setAirlineAdminID(int airlineAdminID) {
+        this.airlineAdminID = airlineAdminID;
+    }
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public void setAirline(Airline airline) {
+        this.airline = airline;
+    }
 
     public AirlineAdmin(Auth auth, Boolean registered, Boolean read, Boolean write, String email, String password) {
         super(auth, registered, read, write, email, password);
@@ -18,5 +36,13 @@ public class AirlineAdmin extends RegisteredClient{
 
     public AirlineAdmin() {
         super(Auth.AIRLINE_ADMIN, true, true, true, "", "");
+    }
+
+    public int getAirlineID() {
+        return airlineID;
+    }
+
+    public void setAirlineID(int airlineID) {
+        this.airlineID = airlineID;
     }
 }
