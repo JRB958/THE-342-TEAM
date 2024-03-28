@@ -287,7 +287,8 @@ public class App {
                                     sourceAirportObject,
                                     destinationAirportObject,
                                     console.getAircraft(aircraftName),
-                                    console.getAirline(airlineName));
+                                    console.getAirline(airlineName),
+                                    "Public");
                             console.addFlight(flight);
                             
                             sqlite.SQLiteConnection.insertFlight(flight);
@@ -305,7 +306,9 @@ public class App {
                                     destinationAirportObject,
                                     console.getAirport(sourceAirport),
                                     console.getAircraft(aircraftName),
-                                    console.getAirline(airlineName));
+                                    console.getAirline(airlineName)
+                                    , "Private");
+
 
                             console.addFlight(flight);
 

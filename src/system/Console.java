@@ -286,7 +286,7 @@ public class Console {
         LocalDateTime scheduledArrival = LocalDateTime.of(2021, 5, 1, 16, 0);
         LocalDateTime actualDepart = LocalDateTime.of(2021, 5, 1, 8, 0);
         LocalDateTime actualArrival = LocalDateTime.of(2021, 5, 1, 16, 0);
-        PrivateFlight privateFlight = new PrivateFlight(scheduledDepart, scheduledArrival, actualDepart, actualArrival, "PF001", source, destination, handlerAirport, aircraft, airline);
+        PrivateFlight privateFlight = new PrivateFlight(scheduledDepart, scheduledArrival, actualDepart, actualArrival, "PF001", source, destination, handlerAirport, aircraft, airline, "Private");
         this.addFlight(privateFlight);
 
     
