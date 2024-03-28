@@ -58,6 +58,10 @@ public class SQLiteConnection {
 
             while (resultSet.next()) {
 
+                if (resultSet.getString("Type").equalsIgnoreCase("PRIVATE")) {
+                    // PrivateFlight flight = new PrivateFlight();
+                    // flight.setHandlerAirport(resultSet.getInt("HandlerAirportID"));
+                }
                 Flight flight = new Flight();
                 flight.setFlightID(resultSet.getInt("FlightID"));
                 flight.setScheduledDepart(

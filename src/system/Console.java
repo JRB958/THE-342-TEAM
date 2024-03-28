@@ -119,6 +119,7 @@ public class Console {
             if (client.getEmail().equals(email) && client.getPassword().equals(password)) {
                 System.out.println("Login successful");
                 this.currentActor = client;
+                return;
             }
         }
         System.out.println("Login failed");
@@ -162,11 +163,16 @@ public class Console {
         if (auth == Auth.UNREGISTERED) {
             System.out.println("Flight " + flight.getFlightNumber() + ": \n\t" + flight.getSource().getAirportName()
                     + " to " + flight.getDestination().getAirportName() + "\n");
-        } else if (auth == Auth.REGISTERED || auth == Auth.AIRPORT_ADMIN || auth == Auth.AIRLINE_ADMIN
+        } else if (auth == Auth.REGISTERED || auth == Auth.AIRLINE_ADMIN
                 || auth == Auth.ADMIN) {
             System.out.println("Flight " + flight.getFlightNumber() + ": \n\t" + flight.getSource().getAirportName()
                     + " to " + flight.getDestination().getAirportName() + "\n\tAirline: "
                     + flight.getHandlerAirline().getAirlineName()
+                    + "\n\tAircraft: " + flight.getFlightAircraft().getAircraftName() + "\n");
+        } else if (auth == Auth.AIRPORT_ADMIN) {
+            System.out.println("Flight " + flight.getFlightNumber() + ": \n\t" + flight.getSource().getAirportName()
+                    + " to " + flight.getDestination().getAirportName() + "\n\tHandled by: "
+                    + flight.getSource().getAirportName()
                     + "\n\tAircraft: " + flight.getFlightAircraft().getAircraftName() + "\n");
         }
     }
@@ -269,6 +275,20 @@ public class Console {
             }
             this.addRegisteredClient(client);
         }
+
+        // Create a private flight
+        Airport source = this.getAirport("LOS");
+        Airport destination = this.getAirport("JFK");
+        Airport handlerAirport = this.getAirport("LOS");
+        Aircraft aircraft = this.getAircraft("Boeing 747");
+        Airline airline = this.getAirline("Delta");
+        LocalDateTime scheduledDepart = LocalDateTime.of(2021, 5, 1, 8, 0);
+        LocalDateTime scheduledArrival = LocalDateTime.of(2021, 5, 1, 16, 0);
+        LocalDateTime actualDepart = LocalDateTime.of(2021, 5, 1, 8, 0);
+        LocalDateTime actualArrival = LocalDateTime.of(2021, 5, 1, 16, 0);
+        PrivateFlight privateFlight = new PrivateFlight(scheduledDepart, scheduledArrival, actualDepart, actualArrival, "PF001", source, destination, handlerAirport, aircraft, airline);
+        this.addFlight(privateFlight);
+
     
         System.out.println("Console initialized");
     }
