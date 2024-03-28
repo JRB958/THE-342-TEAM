@@ -5,9 +5,14 @@ import java.util.Scanner;
 
 import javax.xml.transform.Source;
 
+import org.sqlite.SQLiteConnection;
+
 import actors.*;
 import airports.*;
+import flights.Flight;
+import flights.PrivateFlight;
 import flights.PublicFlight;
+import misc.City;
 import system.*;
 
 public class App {
@@ -22,7 +27,6 @@ public class App {
         System.out.println("====================================");
         System.out.println("\tAirline Simulation");
         System.out.println("====================================\n");
-        
 
         while (true) {
 
@@ -33,18 +37,19 @@ public class App {
             System.out.println("2. Login as a client");
             System.out.println("3. View flights");
             System.out.println("4. Register a flight");
-            System.out.println("5. Exit");
+            System.out.println("5. Add an airport");
+            System.out.println("6. Exit");
             System.out.print("\nEnter choice: ");
 
             int choice = scanner.nextInt();
 
             // Validate choice
-            while (choice < 1 || choice > 5) {
+            while (choice < 1 || choice > 6) {
                 System.out.println("Invalid choice");
                 System.out.print("\nEnter choice: ");
                 choice = scanner.nextInt();
             }
-            
+
             // Loop until user exits
             System.out.println();
 
@@ -82,7 +87,7 @@ public class App {
                     // Login client
                     console.login(loginEmail, loginPassword);
                     break;
-                
+
                 // View flights
                 case 3:
                     // Display all airports
@@ -127,7 +132,8 @@ public class App {
                 case 4:
                     String burner;
                     // check for authorization
-                    if (console.getCurrentActor().getAuth() != Auth.AIRLINE_ADMIN && console.getCurrentActor().getAuth() != Auth.AIRPORT_ADMIN){
+                    if (console.getCurrentActor().getAuth() != Auth.AIRLINE_ADMIN
+                            && console.getCurrentActor().getAuth() != Auth.AIRPORT_ADMIN) {
                         System.out.println("You do not have permission to register a flight");
                         break;
                     }
@@ -137,7 +143,7 @@ public class App {
                     System.out.print("Enter flight number (Eg. AF123): ");
                     String flightNumber = scanner.next();
                     burner = scanner.nextLine();
-                    
+
                     while (console.flightExists(flightNumber)) {
                         System.out.print("\nFlight number already exists");
                         System.out.print("\nEnter flight number (Eg. AF123): ");
@@ -146,11 +152,11 @@ public class App {
 
                     }
 
-                    // ask and check for source airport 
+                    // ask and check for source airport
                     System.out.print("\nEnter source airport code (Eg. LOS): ");
                     String sourceAirport = scanner.next();
                     burner = scanner.nextLine();
-                    
+
                     while (!console.airportExists(sourceAirport)) {
                         System.out.print("\nInvalid source airport");
                         System.out.print("\nEnter source airport code (Eg. LOS): ");
@@ -177,67 +183,56 @@ public class App {
                     Airport destinationAirportObject = (console.getAirport(destinationAirport));
 
                     // ***********
-                    //TODO: uncomment
-                    // commented here and hardcoded for how annoying it is to keep typing dates 
+                    // TODO: uncomment
+                    // commented here and hardcoded for how annoying it is to keep typing dates
                     // ***********
 
-                            // // ask and check for the date and flight of the flight
-                            // System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
-                            // String departureDate = scanner.next();
+                    // ask and check for the date and flight of the flight
+                    System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
+                    String departureDate = scanner.next();
 
-                            // System.out.print("\nEnter departure time (Eg. 15:00): ");
-                            // String departureTime = scanner.next();
+                    System.out.print("\nEnter departure time (Eg. 15:00): ");
+                    String departureTime = scanner.next();
 
-                            // String departureDateTime = departureDate + " " + departureTime;
+                    String departureDateTime = departureDate + " " + departureTime;
 
-                            // // Check if source airport has flights at departure date
-                            // while (console.hasFlightsSource(departureDateTime, console.getAirport(sourceAirport))) {
-                            //     System.out.println("Flight time busy at source at: " + departureDate);
-                            //     System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
-                            //     departureDate = scanner.next();
-                            //     System.out.print("\nEnter departure time (Eg. 15:00): ");
-                            //     departureTime = scanner.next();
-                            //     departureDateTime = departureDate + " " + departureTime;
-                            // }
-                            
-                            // // once check is done, create a DateTime object to pass to flight
-                            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                            // LocalDateTime departureDateTimeObject = LocalDateTime.parse(departureDateTime, formatter);
-
-                            // System.out.println("Enter arrival date (Eg. 2021-12-31): ");
-                            // String arrivalDate = scanner.next();
-
-                            // System.out.println("Enter arrival time (Eg. 15:00): ");
-                            // String arrivalTime = scanner.next();
-
-                            // String arrivalDateTime = arrivalDate + " " + arrivalTime;
-
-                            // while (console.hasFlightsDestination(arrivalDateTime, console.getAirport(sourceAirport))) {
-                            //     System.out.println("Flight time busy at destination at: " + departureDate);
-                            //     System.out.println("Enter arrival date (Eg. 2021-12-31): ");
-                            //     arrivalDate = scanner.next();
-                            //     System.out.println("Enter arrival time (Eg. 15:00): ");
-                            //     arrivalTime = scanner.next();
-                            //     arrivalDateTime = departureDate + " " + departureTime;
-                            // }
-                            // // once check is done, create a DateTime object to pass to flight
-                            // LocalDateTime arrivalDateTimeObject = LocalDateTime.parse(arrivalDateTime, formatter);
-
-                    // ***********
-                    //TODO: uncomment
-                    // ***********
-
-                    System.out.print("Enter aircraft name: ");
-                    String aircraftName = scanner.nextLine();
-
-                    //check if the aircraft exists in the source airport
-                    while (!(sourceAirportObject).aircraftExist(aircraftName)) {
-                        System.out.print("\nAircraft is not available in " + sourceAirportObject.getAirportName() + "\'s fleet");
-                        System.out.print("\nEnter aircraft name: ");
-                        aircraftName = scanner.nextLine();
+                    // Check if source airport has flights at departure date
+                    while (console.hasFlightsSource(departureDateTime, console.getAirport(sourceAirport))) {
+                        System.out.println("Flight time busy at source at: " + departureDate);
+                        System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
+                        departureDate = scanner.next();
+                        System.out.print("\nEnter departure time (Eg. 15:00): ");
+                        departureTime = scanner.next();
+                        departureDateTime = departureDate + " " + departureTime;
                     }
 
-                    
+                    // once check is done, create a DateTime object to pass to flight
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    LocalDateTime departureDateTimeObject = LocalDateTime.parse(departureDateTime, formatter);
+
+                    System.out.println("Enter arrival date (Eg. 2021-12-31): ");
+                    String arrivalDate = scanner.next();
+
+                    System.out.println("Enter arrival time (Eg. 15:00): ");
+                    String arrivalTime = scanner.next();
+
+                    String arrivalDateTime = arrivalDate + " " + arrivalTime;
+
+                    while (console.hasFlightsDestination(arrivalDateTime, console.getAirport(sourceAirport))) {
+                        System.out.println("Flight time busy at destination at: " + departureDate);
+                        System.out.println("Enter arrival date (Eg. 2021-12-31): ");
+                        arrivalDate = scanner.next();
+                        System.out.println("Enter arrival time (Eg. 15:00): ");
+                        arrivalTime = scanner.next();
+                        arrivalDateTime = departureDate + " " + departureTime;
+                    }
+                    // once check is done, create a DateTime object to pass to flight
+                    LocalDateTime arrivalDateTimeObject = LocalDateTime.parse(arrivalDateTime, formatter);
+
+                    // ***********
+                    // TODO: uncomment
+                    // ***********
+
                     // get airline name
                     System.out.print("Enter airline name: ");
                     String airlineName = scanner.nextLine();
@@ -249,38 +244,108 @@ public class App {
                         airlineName = scanner.nextLine();
                     }
 
+                    System.out.print("Enter aircraft name: ");
+                    String aircraftName = scanner.nextLine();
+
+                    // check if the aircraft exists in the source airport
+                    while (!(sourceAirportObject).aircraftExist(aircraftName)) {
+                        System.out.print(
+                                "\nAircraft is not available in " + sourceAirportObject.getAirportName() + "\'s fleet");
+                        System.out.print("\nEnter aircraft name: ");
+                        aircraftName = scanner.nextLine();
+                    }
+
                     // check if the airline has an available aircraft
-                    if (!sourceAirportObject.aircraftExist(aircraftName) || !console.getAirline(airlineName).ownsAircraft(aircraftName)) {
+                    if (!sourceAirportObject.aircraftExist(aircraftName)
+                            || !console.getAirline(airlineName).ownsAircraft(aircraftName)) {
                         System.out.println("Aircraft not available for airline");
                         break;
                     }
-                    
+
                     // ***********
-                    //TODO: remove
+                    // TODO: remove
                     // ***********
-                                LocalDateTime departureDateTimeObject = LocalDateTime.now();
-                                LocalDateTime arrivalDateTimeObject = LocalDateTime.now().plusHours(1) ;
+                    // LocalDateTime departureDateTimeObject = LocalDateTime.now();
+                    // LocalDateTime arrivalDateTimeObject = LocalDateTime.now().plusHours(1) ;
                     // ***********
-                    //TODO: remove
+                    // TODO: remove
                     // ***********
 
-                    console.addFlight(new PublicFlight(departureDateTimeObject, 
-                                                       arrivalDateTimeObject, 
-                                                       departureDateTimeObject, 
-                                                       arrivalDateTimeObject, 
-                                                       flightNumber, 
-                                                       sourceAirportObject, 
-                                                       destinationAirportObject, 
-                                                       console.getAircraft(aircraftName),
-                                                       console.getAirline(airlineName)                          
-                                                        ));
+                    if (console.getCurrentActor().getAuth() == Auth.AIRPORT_ADMIN) {
+                        System.out.println("Is this a public flight? (Y/N): ");
+                        String isPublic = scanner.next();
+                        if (isPublic.equalsIgnoreCase("Y")) {
+                            PublicFlight flight = new PublicFlight(departureDateTimeObject,
+                                    arrivalDateTimeObject,
+                                    departureDateTimeObject,
+                                    arrivalDateTimeObject,
+                                    flightNumber,
+                                    sourceAirportObject,
+                                    destinationAirportObject,
+                                    console.getAircraft(aircraftName),
+                                    console.getAirline(airlineName));
+                            console.addFlight(flight);
+                            
+                            sqlite.SQLiteConnection.insertFlight(flight);
+                            System.out.println("Flight registered successfully");
+                            // return the last flight added
+                            System.out.println(console.getFlights().get(console.getFlights().size() - 1));
+                            break;
+                        } else if (isPublic.equalsIgnoreCase("N")){
+                            PrivateFlight flight = new PrivateFlight(departureDateTimeObject,
+                                    arrivalDateTimeObject,
+                                    departureDateTimeObject,
+                                    arrivalDateTimeObject,
+                                    flightNumber,
+                                    sourceAirportObject,
+                                    destinationAirportObject,
+                                    console.getAirport(sourceAirport),
+                                    console.getAircraft(aircraftName),
+                                    console.getAirline(airlineName));
+
+                            console.addFlight(flight);
+
+                            sqlite.SQLiteConnection.insertFlight(flight);
+                            
+                        }
+                    }
 
                     System.out.println("Flight registered successfully");
-                    //return the last flight added
-                    System.out.println(console.getFlights().get(console.getFlights().size()-1));
+                    // return the last flight added
+                    System.out.println(console.getFlights().get(console.getFlights().size() - 1));
 
                     break;
+
                 case 5:
+                    // Adding an airport
+                    if (console.getCurrentActor().getAuth() != Auth.ADMIN) {
+                        System.out.println("You do not have permission to add an airport");
+                        break;
+                    }
+
+                    System.out.println("Adding an airport...");
+
+                    System.out.print("\nEnter airport name: ");
+                    String airportName = scanner.next();
+                    scanner.nextLine(); // Consume the newline character
+                    System.out.print("\nEnter airport code: ");
+                    String airportCode = scanner.nextLine();
+                    System.out.print("\nEnter the city of the airport: ");
+                    String city = scanner.nextLine();
+                    System.out.print("\nEnter the country of the airport: ");
+                    String country = scanner.nextLine();
+                    System.out.print("\nEnter the current temperature of the city: ");
+                    Double temperature = scanner.nextDouble();
+
+                    City cityObj = new City(city, country, temperature);
+                    sqlite.SQLiteConnection.insertCity(cityObj);
+
+                    Airport airport = new Airport(airportName, airportCode, cityObj);
+                    console.addAirport(airport);
+                    sqlite.SQLiteConnection.insertAirport(airport);
+
+                    break;
+                case 6:
                     System.out.println("Exiting...");
                     scanner.close();
                     return;
