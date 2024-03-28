@@ -190,6 +190,8 @@ public class App {
                     // ask and check for the date and flight of the flight
                     System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
                     String departureDate = scanner.next();
+                    burner = scanner.nextLine();
+
 
                     System.out.print("\nEnter departure time (Eg. 15:00): ");
                     String departureTime = scanner.next();
@@ -201,7 +203,9 @@ public class App {
                     while (console.hasFlightsSource(departureDateTime, console.getAirport(sourceAirport))) {
                         System.out.println("Flight time busy at source at: " + departureDate);
                         System.out.print("\nEnter departure date (Eg. 2021-12-31): ");
-                        departureDate = scanner.next();
+                        departureDate = scanner.nextLine();
+                        burner = scanner.nextLine();
+
                         System.out.print("\nEnter departure time (Eg. 15:00): ");
                         departureTime = scanner.next();
                         burner = scanner.nextLine();
@@ -213,7 +217,9 @@ public class App {
                     LocalDateTime departureDateTimeObject = LocalDateTime.parse(departureDateTime, formatter);
 
                     System.out.println("Enter arrival date (Eg. 2021-12-31): ");
-                    String arrivalDate = scanner.next();
+                    String arrivalDate = scanner.nextLine();
+                    burner = scanner.nextLine();
+
 
                     System.out.println("Enter arrival time (Eg. 15:00): ");
                     String arrivalTime = scanner.next();
@@ -224,7 +230,9 @@ public class App {
                     while (console.hasFlightsDestination(arrivalDateTime, console.getAirport(sourceAirport))) {
                         System.out.println("Flight time busy at destination at: " + departureDate);
                         System.out.println("Enter arrival date (Eg. 2021-12-31): ");
-                        arrivalDate = scanner.next();
+                        arrivalDate = scanner.nextLine();
+                        burner = scanner.nextLine();
+
                         System.out.println("Enter arrival time (Eg. 15:00): ");
                         arrivalTime = scanner.next();
                         burner = scanner.nextLine();
@@ -246,25 +254,26 @@ public class App {
                         System.out.print("\nAirline doesn't exist");
                         System.out.print("\nEnter airline name: ");
                         airlineName = scanner.nextLine();
+                        burner = scanner.nextLine();
                     }
 
                     System.out.print("Enter aircraft name: ");
                     String aircraftName = scanner.nextLine();
 
-                    // check if the aircraft exists in the source airport
-                    while (!(sourceAirportObject).aircraftExist(aircraftName)) {
-                        System.out.print(
-                                "\nAircraft is not available in " + sourceAirportObject.getAirportName() + "\'s fleet");
-                        System.out.print("\nEnter aircraft name: ");
-                        aircraftName = scanner.nextLine();
-                    }
+                    // // check if the aircraft exists in the source airport
+                    // while (!(sourceAirportObject).aircraftExist(aircraftName)) {
+                    //     System.out.print(
+                    //             "\nAircraft is not available in " + sourceAirportObject.getAirportName() + "\'s fleet");
+                    //     System.out.print("\nEnter aircraft name: ");
+                    //     aircraftName = scanner.nextLine();
+                    // }
 
-                    // check if the airline has an available aircraft
-                    if (!sourceAirportObject.aircraftExist(aircraftName)
-                            || !console.getAirline(airlineName).ownsAircraft(aircraftName)) {
-                        System.out.println("Aircraft not available for airline");
-                        break;
-                    }
+                    // // check if the airline has an available aircraft
+                    // if (!sourceAirportObject.aircraftExist(aircraftName)
+                    //         || !console.getAirline(airlineName).ownsAircraft(aircraftName)) {
+                    //     System.out.println("Aircraft not available for airline");
+                    //     break;
+                    // }
 
                     // ***********
                     // TODO: remove
