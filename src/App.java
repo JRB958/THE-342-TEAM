@@ -193,6 +193,7 @@ public class App {
 
                     System.out.print("\nEnter departure time (Eg. 15:00): ");
                     String departureTime = scanner.next();
+                    burner = scanner.nextLine();
 
                     String departureDateTime = departureDate + " " + departureTime;
 
@@ -203,6 +204,7 @@ public class App {
                         departureDate = scanner.next();
                         System.out.print("\nEnter departure time (Eg. 15:00): ");
                         departureTime = scanner.next();
+                        burner = scanner.nextLine();
                         departureDateTime = departureDate + " " + departureTime;
                     }
 
@@ -215,6 +217,7 @@ public class App {
 
                     System.out.println("Enter arrival time (Eg. 15:00): ");
                     String arrivalTime = scanner.next();
+                    burner = scanner.nextLine();
 
                     String arrivalDateTime = arrivalDate + " " + arrivalTime;
 
@@ -224,6 +227,7 @@ public class App {
                         arrivalDate = scanner.next();
                         System.out.println("Enter arrival time (Eg. 15:00): ");
                         arrivalTime = scanner.next();
+                        burner = scanner.nextLine();
                         arrivalDateTime = departureDate + " " + departureTime;
                     }
                     // once check is done, create a DateTime object to pass to flight
