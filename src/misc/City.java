@@ -11,6 +11,15 @@ public class City {
         this.country = country;
         this.temp = temp;
     }
+    public City(String city, String country, Double temperature) {
+        this.name = city;
+        this.country = country;
+        this.temp = temperature;
+    }
+
+    public void setCityID(int cityID) {
+        this.cityID = cityID;
+    }
     public int getCityID() {
         return cityID;
     }
