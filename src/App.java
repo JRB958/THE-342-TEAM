@@ -1,3 +1,4 @@
+
 // Main entry point of the application
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -298,14 +299,18 @@ public class App {
                                     console.getAircraft(aircraftName),
                                     console.getAirline(airlineName),
                                     "Public");
+                            flight.setAircraftID(console.getAircraft(aircraftName).getAircraftID());
+                            flight.setAirlineID(console.getAirline(airlineName).getAirlineID());
+                            flight.setSourceID(sourceAirportObject.getAirportID());
+                            flight.setDestinationID(destinationAirportObject.getAirportID());
                             console.addFlight(flight);
-                            
+
                             sqlite.SQLiteConnection.insertFlight(flight);
                             System.out.println("Flight registered successfully");
                             // return the last flight added
                             System.out.println(console.getFlights().get(console.getFlights().size() - 1));
                             break;
-                        } else if (isPublic.equalsIgnoreCase("N")){
+                        } else if (isPublic.equalsIgnoreCase("N")) {
                             PrivateFlight flight = new PrivateFlight(departureDateTimeObject,
                                     arrivalDateTimeObject,
                                     departureDateTimeObject,
@@ -315,14 +320,16 @@ public class App {
                                     destinationAirportObject,
                                     console.getAirport(sourceAirport),
                                     console.getAircraft(aircraftName),
-                                    console.getAirline(airlineName)
-                                    , "Private");
-
+                                    console.getAirline(airlineName), "Private");
+                            flight.setAircraftID(console.getAircraft(aircraftName).getAircraftID());
+                            flight.setAirlineID(console.getAirline(airlineName).getAirlineID());
+                            flight.setSourceID(sourceAirportObject.getAirportID());
+                            flight.setDestinationID(destinationAirportObject.getAirportID());
 
                             console.addFlight(flight);
 
                             sqlite.SQLiteConnection.insertFlight(flight);
-                            
+
                         }
                     }
 
